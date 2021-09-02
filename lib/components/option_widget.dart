@@ -1,7 +1,10 @@
+import '../backend/backend.dart';
 import '../components/playlist_widget.dart';
 import '../utils/theme.dart';
+import '../utils/toggle_icon.dart';
+import '../utils/util.dart';
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class OptionWidget extends StatefulWidget {
   OptionWidget({Key key}) : super(key: key);
@@ -37,11 +40,11 @@ class _OptionWidgetState extends State<OptionWidget> {
               children: [
                 Expanded(
                   child: Align(
-                    alignment: Alignment(0, 0),
+                    alignment: Alignment(0.4, 0),
                     child: Text(
                       'Ajouter à une playlist',
                       textAlign: TextAlign.center,
-                      style: VinilTheme.bodyText1.override(
+                      style: VinylTheme.bodyText1.override(
                         fontFamily: 'Source Sans Pro',
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
@@ -79,7 +82,7 @@ class _OptionWidgetState extends State<OptionWidget> {
                   child: Text(
                     'Afficher l’album',
                     textAlign: TextAlign.center,
-                    style: VinilTheme.bodyText1.override(
+                    style: VinylTheme.bodyText1.override(
                       fontFamily: 'Source Sans Pro',
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
@@ -105,18 +108,18 @@ class _OptionWidgetState extends State<OptionWidget> {
           endIndent: 10,
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: Align(
-                  alignment: Alignment(-0.75, 0),
+                  alignment: Alignment(-0.75, 0.2),
                   child: Text(
                     'J’aime',
                     textAlign: TextAlign.center,
-                    style: VinilTheme.bodyText1.override(
+                    style: VinylTheme.bodyText1.override(
                       fontFamily: 'Source Sans Pro',
                       fontSize: 15,
                       fontWeight: FontWeight.normal,
@@ -126,11 +129,58 @@ class _OptionWidgetState extends State<OptionWidget> {
               ),
               Expanded(
                 child: Align(
-                  alignment: Alignment(0.75, 0),
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: Colors.black,
-                    size: 24,
+                  alignment: Alignment(0.85, 0),
+                  child: StreamBuilder<List<FavoriteRecord>>(
+                    stream: queryFavoriteRecord(
+                      singleRecord: true,
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(
+                              color: VinylTheme.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      List<FavoriteRecord> toggleIconFavoriteRecordList =
+                          snapshot.data;
+                      // Customize what your widget looks like with no query results.
+                      if (snapshot.data.isEmpty) {
+                        return Container(
+                          height: 100,
+                          child: Center(
+                            child: Text('No results.'),
+                          ),
+                        );
+                      }
+                      final toggleIconFavoriteRecord =
+                          toggleIconFavoriteRecordList.first;
+                      return ToggleIcon(
+                        onPressed: () async {
+                          final favoriteUpdateData = createFavoriteRecordData(
+                            favorite: !toggleIconFavoriteRecord.favorite,
+                          );
+                          await toggleIconFavoriteRecord.reference
+                              .update(favoriteUpdateData);
+                        },
+                        value: toggleIconFavoriteRecord.favorite,
+                        onIcon: Icon(
+                          Icons.favorite_border,
+                          color: Colors.black,
+                          size: 25,
+                        ),
+                        offIcon: Icon(
+                          Icons.favorite_sharp,
+                          color: Colors.black,
+                          size: 25,
+                        ),
+                      );
+                    },
                   ),
                 ),
               )
@@ -138,10 +188,10 @@ class _OptionWidgetState extends State<OptionWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 38, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
           child: Text(
             'Annuler',
-            style: VinilTheme.bodyText1.override(
+            style: VinylTheme.bodyText1.override(
               fontFamily: 'Source Sans Pro',
               color: Color(0xFFFF0000),
             ),

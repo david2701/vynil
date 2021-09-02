@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>480678965157-bv5j45rn0ngu6qsm5q70ep4f5ftd69t4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.480678965157-bv5j45rn0ngu6qsm5q70ep4f5ftd69t4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>480678965157-4c457r67b191g6bpn3han679qoi5e755.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBIp7315h6lq_xNdP2lAaBK1TRpKdQTXdk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>480678965157</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dvillegas.vynilmatic</string>
+	<key>PROJECT_ID</key>
+	<string>vynil-2e0fc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vynil-2e0fc.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:480678965157:ios:c7ede9c9532eb888a3424c</string>
+</dict>
+</plist>

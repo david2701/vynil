@@ -1,10 +1,14 @@
-import '../components/playlist_widget.dart';
-import '../utils/animations.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:vynilmatic/utils/util.dart';
+
+import '../backend/backend.dart';
 import '../utils/theme.dart';
 import '../utils/widgets.dart';
+import '../player/player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AfficherWidget extends StatefulWidget {
   AfficherWidget({Key key}) : super(key: key);
@@ -13,31 +17,8 @@ class AfficherWidget extends StatefulWidget {
   _AfficherWidgetState createState() => _AfficherWidgetState();
 }
 
-class _AfficherWidgetState extends State<AfficherWidget>
-    with TickerProviderStateMixin {
-  final animationsMap = {
-    'rowOnPageLoadAnimation1': AnimationInfo(
-      curve: Curves.bounceOut,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-    ),
-    'rowOnPageLoadAnimation2': AnimationInfo(
-      curve: Curves.bounceOut,
-      trigger: AnimationTrigger.onPageLoad,
-      duration: 600,
-    ),
-  };
+class _AfficherWidgetState extends State<AfficherWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    startAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onPageLoad),
-      this,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +62,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                   padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
                                   child: Text(
                                     'Suprême NTM',
-                                    style: VinilTheme.bodyText1.override(
+                                    style: VinylTheme.bodyText1.override(
                                       fontFamily: 'Source Sans Pro',
                                       fontSize: 15,
                                       fontWeight: FontWeight.w800,
@@ -96,7 +77,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                       'Suprême NTM',
                                       textAlign: TextAlign.center,
                                       style:
-                                          VinilTheme.bodyText1.override(
+                                          VinylTheme.bodyText1.override(
                                         fontFamily: 'Source Sans Pro',
                                         fontSize: 13,
                                       ),
@@ -108,7 +89,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                   child: Text(
                                     '1976 - France',
                                     textAlign: TextAlign.center,
-                                    style: VinilTheme.bodyText1.override(
+                                    style: VinylTheme.bodyText1.override(
                                       fontFamily: 'Source Sans Pro',
                                       fontSize: 11,
                                     ),
@@ -163,7 +144,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                               padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: Text(
                                 'On Est Encore Là (part 2)',
-                                style: VinilTheme.bodyText1.override(
+                                style: VinylTheme.bodyText1.override(
                                   fontFamily: 'Source Sans Pro',
                                   color: Colors.white,
                                   fontSize: 14,
@@ -175,7 +156,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                               padding: EdgeInsets.fromLTRB(0, 3, 0, 0),
                               child: Text(
                                 'Suprême NTM',
-                                style: VinilTheme.bodyText1.override(
+                                style: VinylTheme.bodyText1.override(
                                   fontFamily: 'Source Sans Pro',
                                   color: Colors.white,
                                 ),
@@ -183,7 +164,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                             ),
                             Text(
                               'Conscious, Ragga HipHop',
-                              style: VinilTheme.bodyText1.override(
+                              style: VinylTheme.bodyText1.override(
                                 fontFamily: 'Source Sans Pro',
                                 color: Colors.white,
                                 fontSize: 8,
@@ -197,8 +178,19 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                                     child: FFButtonWidget(
-                                      onPressed: () {
-                                        print('Button pressed ...');
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                            duration:
+                                                Duration(milliseconds: 3000),
+                                            reverseDuration:
+                                                Duration(milliseconds: 3000),
+                                            child: PlayerWidget(),
+                                          ),
+                                        );
                                       },
                                       text: 'Lecture',
                                       icon: Icon(
@@ -210,7 +202,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                         height: 40,
                                         color: Colors.black,
                                         textStyle:
-                                            VinilTheme.subtitle2.override(
+                                            VinylTheme.subtitle2.override(
                                           fontFamily: 'Source Sans Pro',
                                           color: Colors.white,
                                           fontSize: 12,
@@ -231,8 +223,18 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                         padding:
                                             EdgeInsets.fromLTRB(0, 20, 0, 0),
                                         child: FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
+                                          onPressed: () async {
+                                            await Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                type: PageTransitionType.fade,
+                                                duration: Duration(
+                                                    milliseconds: 2000),
+                                                reverseDuration: Duration(
+                                                    milliseconds: 2000),
+                                                child: PlayerWidget(),
+                                              ),
+                                            );
                                           },
                                           text: 'Aléatoire',
                                           icon: FaIcon(
@@ -243,7 +245,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                             width: 130,
                                             height: 40,
                                             color: Colors.black,
-                                            textStyle: VinilTheme
+                                            textStyle: VinylTheme
                                                 .subtitle2
                                                 .override(
                                               fontFamily: 'Source Sans Pro',
@@ -298,10 +300,15 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                 alignment: Alignment(0.45, 0),
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(180, 0, 0, 0),
-                                  child: FaIcon(
-                                    FontAwesomeIcons.share,
-                                    color: Colors.black,
-                                    size: 24,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      await Share.share('');
+                                    },
+                                    child: FaIcon(
+                                      FontAwesomeIcons.share,
+                                      color: Colors.black,
+                                      size: 24,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -337,7 +344,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                               padding: EdgeInsets.fromLTRB(20, 0, 0, 5),
                               child: Text(
                                 'Aimé par',
-                                style: VinilTheme.bodyText1.override(
+                                style: VinylTheme.bodyText1.override(
                                   fontFamily: 'Source Sans Pro',
                                   fontSize: 10,
                                 ),
@@ -347,7 +354,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                               padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               child: Text(
                                 ' Vinymatic et 57 autres personnes',
-                                style: VinilTheme.bodyText1.override(
+                                style: VinylTheme.bodyText1.override(
                                   fontFamily: 'Source Sans Pro',
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -367,19 +374,35 @@ class _AfficherWidgetState extends State<AfficherWidget>
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
+
                           children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                              child: Text(
+                                'The Stylistics - Fabulous ',
+                                style: VinylTheme.bodyText1.override(
+                                  fontFamily: 'Source Sans Pro',
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
                               child: Text(
-                                'The Stylistics - Fabulous 2x vinyls, Epic ‎– EPC 489766 1, Epic ‎– 489766 1, France,\n 1976, LP, Gatefold, Picture disc, Conscious, Ragga HipHop',
-                                textAlign: TextAlign.center,
-                                style: VinilTheme.bodyText1.override(
+                                '2x vinyls, Epic ‎– EPC 489766 1, Epic ‎– 489766, France, 1976,\n'
+                                    'LP,  Gatefold, Picture disc, Conscious, Ragga HipHop',
+                                overflow: TextOverflow.clip,
+                                maxLines: 2,
+                                //textAlign: TextAlign.start,
+
+                                style: VinylTheme.bodyText1.override(
                                   fontFamily: 'Source Sans Pro',
                                   fontSize: 10,
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -398,7 +421,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                               children: [
                                 Text(
                                   '13 offres sur Vinymatic',
-                                  style: VinilTheme.bodyText1.override(
+                                  style: VinylTheme.bodyText1.override(
                                     fontFamily: 'Source Sans Pro',
                                     color: Color(0xFF71F1B1),
                                     fontSize: 13,
@@ -410,7 +433,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                   child: Text(
                                     'à partir de 12.50 €',
                                     textAlign: TextAlign.start,
-                                    style: VinilTheme.bodyText1.override(
+                                    style: VinylTheme.bodyText1.override(
                                       fontFamily: 'Source Sans Pro',
                                       fontSize: 10,
                                     ),
@@ -431,7 +454,7 @@ class _AfficherWidgetState extends State<AfficherWidget>
                                     height: 35,
                                     color: Color(0xFFFFFFFF),
                                     textStyle:
-                                    VinilTheme.subtitle2.override(
+                                        VinylTheme.subtitle2.override(
                                       fontFamily: 'Source Sans Pro',
                                       color: Colors.black,
                                       fontSize: 13,
@@ -457,873 +480,232 @@ class _AfficherWidgetState extends State<AfficherWidget>
                         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 655,
+                          height: 400,
                           decoration: BoxDecoration(
                             color: Colors.white,
+                            shape: BoxShape.rectangle,
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Row(
+                          child: StreamBuilder<List<SongsRecord>>(
+                            stream: querySongsRecord(
+                              limit: 10,
+                            ),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator(
+                                      color: VinylTheme.primaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+                              List<SongsRecord> columnSongsRecordList =
+                                  snapshot.data;
+                              // Customize what your widget looks like with no query results.
+                              if (snapshot.data.isEmpty) {
+                                return Container(
+                                  height: 100,
+                                  child: Center(
+                                    child: Text('No results.'),
+                                  ),
+                                );
+                              }
+                              return Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'A1 ',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(8, 0, 80, 0),
-                                    child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children:
+                                    List.generate(columnSongsRecordList.length,
+                                        (columnIndex) {
+                                  final columnSongsRecord =
+                                      columnSongsRecordList[columnIndex];
+                                  return Expanded(
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        Align(
-                                          alignment: Alignment(5, 0),
-                                          child: Text(
-                                            'Because I Love You, Girl',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        ),
                                         Padding(
                                           padding:
-                                              EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                              EdgeInsets.fromLTRB(0, 0, 10, 0),
                                           child: Text(
-                                            'Brother to Brother',
-                                            textAlign: TextAlign.start,
-                                            style: VinilTheme.bodyText1
+                                            'A1',
+                                            style: VinylTheme.bodyText1
                                                 .override(
                                               fontFamily: 'Source Sans Pro',
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment(-0.9, 0),
-                                    child: Icon(
-                                      Icons.volume_mute_outlined,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ).animated(
-                                  [animationsMap['rowOnPageLoadAnimation1']]),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  await showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    builder: (context) {
-                                      return Container(
-                                        height: 660,
-                                        child: PlaylistWidget(),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'A2',
-                                      style:
-                                          VinilTheme.bodyText1.override(
-                                        fontFamily: 'Source Sans Pro',
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment(-1, 0),
+                                        Text(
+                                          valueOrDefault<String>(
+                                            columnSongsRecord.name,
+                                            'Name',
+                                          ),
+                                          style: VinylTheme.bodyText1
+                                              .override(
+                                            fontFamily: 'Source Sans Pro',
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Align(
+                                            alignment: Alignment(1, 0),
                                             child: Text(
-                                              'Can\'t Help Failling In Love',
-                                              style: VinilTheme.bodyText1
+                                              valueOrDefault<String>(
+                                                columnSongsRecord.time,
+                                                'time',
+                                              ),
+                                              style: VinylTheme.bodyText1
                                                   .override(
                                                 fontFamily: 'Source Sans Pro',
                                               ),
                                             ),
                                           ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFEEEEEE),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                            child: Text(
+                              'Titre de la face du disque',
+                              style: VinylTheme.bodyText1.override(
+                                fontFamily: 'Source Sans Pro',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment(-0.5, 0),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          child: Text(
+                            'Sous-titre des subtracks ( ou sous titre de la face )',
+                            textAlign: TextAlign.start,
+                            style: VinylTheme.bodyText1.override(
+                              fontFamily: 'Source Sans Pro',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Material(
+                          color: Colors.transparent,
+                          elevation: 280,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 230,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.rectangle,
+                            ),
+                            child: StreamBuilder<List<SongsRecord>>(
+                              stream: querySongsRecord(
+                                limit: 5,
+                              ),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator(
+                                        color: VinylTheme.primaryColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                List<SongsRecord> columnSongsRecordList =
+                                    snapshot.data;
+                                // Customize what your widget looks like with no query results.
+                                if (snapshot.data.isEmpty) {
+                                  return Container(
+                                    height: 100,
+                                    child: Center(
+                                      child: Text('No results.'),
+                                    ),
+                                  );
+                                }
+                                return Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: List.generate(
+                                      columnSongsRecordList.length,
+                                      (columnIndex) {
+                                    final columnSongsRecord =
+                                        columnSongsRecordList[columnIndex];
+                                    return Expanded(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
                                           Padding(
-                                            padding:
-                                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 0, 10, 0),
                                             child: Text(
-                                              'C.B & Ten Others With Axes',
-                                              textAlign: TextAlign.start,
-                                              style: VinilTheme.bodyText1
+                                              'A1',
+                                              style: VinylTheme.bodyText1
                                                   .override(
                                                 fontFamily: 'Source Sans Pro',
-                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            valueOrDefault<String>(
+                                              columnSongsRecord.name,
+                                              'Name',
+                                            ),
+                                            style: VinylTheme.bodyText1
+                                                .override(
+                                              fontFamily: 'Source Sans Pro',
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: Alignment(1, 0),
+                                              child: Text(
+                                                valueOrDefault<String>(
+                                                  columnSongsRecord.time,
+                                                  'time',
+                                                ),
+                                                style: VinylTheme
+                                                    .bodyText1
+                                                    .override(
+                                                  fontFamily: 'Source Sans Pro',
+                                                ),
                                               ),
                                             ),
                                           )
                                         ],
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment(1, 0),
-                                        child: Text(
-                                          '3.30',
-                                          style: VinilTheme.bodyText1
-                                              .override(
-                                            fontFamily: 'Source Sans Pro',
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'A3 ',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(7, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'Maybe It’s Because You’re Lonely',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ).animated(
-                                  [animationsMap['rowOnPageLoadAnimation2']]),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'A4',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Are',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'A5',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            ' It’s So Good',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'B1',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'Sixteen Bars',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'B2',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'Baby, Don’t Change Your Mind',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'B3',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'I Will Love You Always',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'B4',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'Starvin’ Love',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'B5',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 25,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFF2F2F2),
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment(-1, 0),
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                      child: Text(
-                                        'Titre de la face du disque',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 20, 40, 10),
-                                child: Text(
-                                  'Sous-titre des subtracks ( ou sous titre de la face)',
-                                  textAlign: TextAlign.start,
-                                  style: VinilTheme.bodyText1.override(
-                                    fontFamily: 'Source Sans Pro',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                    child: Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Text(
-                                    'C1',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                    child: Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Text(
-                                    'C2',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                    child: Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Text(
-                                    'C3',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                    child: Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Text(
-                                    'C4',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                    child: Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  Text(
-                                    'C5',
-                                    style: VinilTheme.bodyText1.override(
-                                      fontFamily: 'Source Sans Pro',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 80, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment(-1, 0),
-                                          child: Text(
-                                            'You Ought To Be With Me',
-                                            style: VinilTheme.bodyText1
-                                                .override(
-                                              fontFamily: 'Source Sans Pro',
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment(1, 0),
-                                      child: Text(
-                                        '3.30',
-                                        style:
-                                            VinilTheme.bodyText1.override(
-                                          fontFamily: 'Source Sans Pro',
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
+                                    );
+                                  }),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       )

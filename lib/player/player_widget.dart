@@ -1,9 +1,10 @@
-import '../afficher/afficher_widget.dart';
 import '../components/option_widget.dart';
 import '../utils/theme.dart';
+import '../utils/util.dart';
+import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class PlayerWidget extends StatefulWidget {
   PlayerWidget({Key key}) : super(key: key);
@@ -50,7 +51,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 child: Text(
                   'On Est Encore Là (part 2)',
                   textAlign: TextAlign.start,
-                  style: VinilTheme.bodyText1.override(
+                  style: VinylTheme.bodyText1.override(
                     fontFamily: 'Source Sans Pro',
                     color: Colors.white,
                     fontSize: 22,
@@ -65,7 +66,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: Text(
                   'Suprême NTM',
-                  style: VinilTheme.bodyText1.override(
+                  style: VinylTheme.bodyText1.override(
                     fontFamily: 'Source Sans Pro',
                     color: Colors.white,
                     fontSize: 16,
@@ -182,7 +183,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AfficherWidget(),
+                            builder: (context) =>
+                                NavBarPage(initialPage: 'Afficher'),
                           ),
                         );
                       },
